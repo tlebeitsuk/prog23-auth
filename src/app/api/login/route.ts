@@ -1,4 +1,5 @@
 import { users } from "../db"
+import { cookies } from "next/headers"
 const bcrypt = require('bcrypt')
 
 export async function POST(req: Request) {
@@ -17,6 +18,16 @@ export async function POST(req: Request) {
     const match = await bcrypt.compare(password, user.password)
 
     if (match) {
+      // TODO: Set cookie that contain user.id
+      const cookieStore = await cookies()
+      cookieStore.set({
+        name: 'session',
+        value: user.id.toString(),
+        // httpOnly: true
+        // secure: true,
+        // sameSite: 'Lax'
+      })
+
       return Response.json({ id: user.id })
     }
 

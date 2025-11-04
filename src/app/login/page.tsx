@@ -26,7 +26,7 @@ export default function LoginPage() {
 			alert('Fel lösenord eller användarnamn')
 		} else {
 			// Navigate to user profile
-			router.push(`/profile?id=${result.id}`)
+			router.push("/profile")
 		}
 	}
 	return (

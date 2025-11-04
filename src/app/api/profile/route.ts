@@ -1,8 +1,10 @@
 import { users } from "../db"
+import { cookies } from "next/headers"
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const id = searchParams.get('id')
+
+  const cookieStore = await cookies()
+  const id = cookieStore.get('session')?.value
 
   if (id) {
     const user = users.find((user) => user.id == id)
