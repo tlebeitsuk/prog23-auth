@@ -1,4 +1,4 @@
-import { users } from "../db"
+import { users, sessions } from "../db"
 import { cookies } from "next/headers"
 const bcrypt = require('bcrypt')
 
@@ -18,14 +18,26 @@ export async function POST(req: Request) {
     const match = await bcrypt.compare(password, user.password)
 
     if (match) {
-      // TODO: Set cookie that contain user.id
+      const sessionId = crypto.randomUUID()
+
+      console.log('sessionId: ', sessionId)
+
+      // Create cookie
       const cookieStore = await cookies()
       cookieStore.set({
         name: 'session',
-        value: user.id.toString(),
+        value: sessionId,
         // httpOnly: true
         // secure: true,
         // sameSite: 'Lax'
+      })
+
+      // Create and save session
+      sessions.push({
+        id: sessionId,
+        userId: user.id,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 timmar
       })
 
       return Response.json({ id: user.id })

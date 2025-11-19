@@ -3,3 +3,10 @@ export const users = [
   { id: 102, username: "stina", password: "superhardpw22", admin: true, createdAt: 1758619750586 },
   { id: 103, username: "elf", password: "testingtesting", admin: false, createdAt: 1758619750586 }
 ]
+
+export const sessions: {
+  id: string
+  userId: number
+  createdAt: number
+  expiresAt: number
+}[] = []

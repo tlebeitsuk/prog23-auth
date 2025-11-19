@@ -1,5 +1,6 @@
 import { users } from "../db"
 const bcrypt = require('bcrypt')
+import { cookies } from "next/headers"
 
 export async function POST(req: Request) {
   const { username, password } = await req.json()
@@ -21,6 +22,16 @@ export async function POST(req: Request) {
 
   // Add user to "db"
   users.push(newUser)
+
+  // Create cookie
+  const cookieStore = await cookies()
+  cookieStore.set({
+    name: 'session',
+    value: newUser.id.toString(),
+    // httpOnly: true
+    // secure: true,
+    // sameSite: 'Lax'
+  })
 
   // Send back new user id
   return Response.json({ id: newUser.id })
